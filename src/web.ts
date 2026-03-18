@@ -28,7 +28,7 @@ export class mDNSWeb extends WebPlugin implements mDNSPlugin {
         discover(o?: MdnsDiscoverOptions): Promise<MdnsDiscoverResult>;
       } {
     if (typeof window === 'undefined') return undefined;
-    return (window as any).mDNS || (window as any).mdns;
+    return window.mDNS || window.mdns;
   }
 
   async startBroadcast(options: MdnsBroadcastOptions): Promise<MdnsBroadcastResult> {

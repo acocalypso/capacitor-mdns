@@ -13,7 +13,7 @@ declare global {
      * Electron mDNS API bridge (preload). Mirrors Capacitor methods.
      * Primary name with the same casing as iOS jsName.
      */
-    mDNS: {
+    mDNS?: {
       startBroadcast(options: MdnsBroadcastOptions): Promise<MdnsBroadcastResult>;
       stopBroadcast(): Promise<MdnsStopResult>;
       discover(options?: MdnsDiscoverOptions): Promise<MdnsDiscoverResult>;
@@ -21,7 +21,7 @@ declare global {
     /**
      * Lowercase alias for convenience.
      */
-    mdns: Window['mDNS'];
+    mdns?: NonNullable<Window['mDNS']>;
   }
 }
 

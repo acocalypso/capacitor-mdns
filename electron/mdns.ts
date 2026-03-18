@@ -97,7 +97,7 @@ export class mDNS {
   }
 
   private hasCbStop(x: unknown): x is { stop: (cb?: () => void) => void } {
-    return !!x && typeof (x as any).stop === 'function';
+    return !!x && typeof (x as { stop?: unknown }).stop === 'function';
   }
   private async safeStopService(svc: Service | undefined): Promise<void> {
     if (!svc || !this.hasCbStop(svc)) return;
