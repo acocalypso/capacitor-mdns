@@ -200,7 +200,7 @@ export class mDNS {
 
   /**
    * Discover services of the given type and optionally filter by instance name.
-   * Deduplicates by (name:port), collects IPv4/IPv6 addresses and TXT, and
+    * Deduplicates by service identity including hosts, collects IPv4/IPv6 addresses and TXT, and
    * resolves with either an early-exit match or after a timeout.
    * @param options See MdnsDiscoverOptions for type/name/timeout.
    */
@@ -245,8 +245,16 @@ export class mDNS {
             hosts: Array.isArray(s.addresses) ? s.addresses.slice() : [],
             txt: s.txt && Object.keys(s.txt).length ? (s.txt as Record<string, string>) : undefined,
           };
-          const key = `${item.name}:${item.port}`;
-          if (!services.some((x) => `${x.name}:${x.port}` === key)) services.push(item);
+          const hostsKey = item.hosts.slice().sort().join(',');
+          const key = `${item.name}|${item.type}|${item.domain}|${item.port}|${hostsKey}`;
+          if (
+            !services.some((x) => {
+              const xHostsKey = (x.hosts ?? []).slice().sort().join(',');
+              return `${x.name}|${x.type}|${x.domain}|${x.port}|${xHostsKey}` === key;
+            })
+          ) {
+            services.push(item);
+          }
           if (targetId && this.matchesTarget(item.name, targetId)) finish();
         });
 
